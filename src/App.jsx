@@ -235,7 +235,7 @@ export default function MamaAI() {
       )}
 
       {/* Música */}
-      <audio id="music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop />
+      <audio id="music" src="https://cdn.freesound.org/previews/396/396751_5123853-lq.mp3" loop />
 
       {/* Glow fondo */}
       <div
