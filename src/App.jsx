@@ -10,6 +10,8 @@ export default function MamaAI() {
     "Si volviera a nacer, te escogería otra vez.",
     "Nunca habrá alguien como tú.",
     "Tu amor me salvó muchas veces.",
+    "Eres mi héroe sin capa 🦸‍♀️",
+    "Contigo aprendí qué es amar de verdad.",
   ];
 
   const [loading, setLoading] = useState(true);
@@ -18,6 +20,18 @@ export default function MamaAI() {
   const [visible, setVisible] = useState(true);
   const [mostrarCarta, setMostrarCarta] = useState(false);
   const [mensajeEspecial, setMensajeEspecial] = useState(false);
+  const [mensajeTipeado, setMensajeTipeado] = useState("");
+  const [contadorAbrazos, setContadorAbrazos] = useState(0);
+  const [mostrarConfeti, setMostrarConfeti] = useState(false);
+  const [fotos, setFotos] = useState([
+    "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=1200&auto=format&fit=crop",
+  ]);
+  const [mostrarSubirFoto, setMostrarSubirFoto] = useState(false);
+  const [diasDesdeNacimiento, setDiasDesdeNacimiento] = useState(0);
+  const [mensajeSecretoRevelado, setMensajeSecretoRevelado] = useState(0);
+  const [mostrarVideo, setMostrarVideo] = useState(false);
 
   const lineas = [
     "$ initializing_mom_ai.exe",
@@ -28,16 +42,36 @@ export default function MamaAI() {
     "System ready ❤️",
   ];
 
+  // Mensaje especial completo que se tipeará
+  const mensajeCompleto = `Mamá... gracias por nunca dejarme solo. Gracias por cada abrazo, cada desvelo y cada sacrificio. Todo lo bueno que hay en mí empezó contigo. Y aunque a veces no encuentre las palabras correctas... quiero que nunca olvides cuánto te amo ❤️`;
+
+  // Calcular días desde nacimiento (ejemplo: 15 de mayo de 1970)
+  useEffect(() => {
+    const fechaNacimiento = new Date(1970, 4, 15); // Cambia por la fecha real de tu mamá
+    const hoy = new Date();
+    const diferencia = hoy - fechaNacimiento;
+    const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+    setDiasDesdeNacimiento(dias);
+  }, []);
+
+  // Efecto de tipeo para el mensaje especial
+  useEffect(() => {
+    if (mensajeEspecial && mensajeTipeado.length < mensajeCompleto.length) {
+      const timeout = setTimeout(() => {
+        setMensajeTipeado(mensajeCompleto.slice(0, mensajeTipeado.length + 1));
+      }, 50);
+      return () => clearTimeout(timeout);
+    }
+  }, [mensajeEspecial, mensajeTipeado]);
+
   useEffect(() => {
     let index = 0;
-
     const interval = setInterval(() => {
       setTerminalText((prev) => [...prev, lineas[index]]);
       index++;
 
       if (index >= lineas.length) {
         clearInterval(interval);
-
         setTimeout(() => {
           setLoading(false);
         }, 1200);
@@ -49,7 +83,6 @@ export default function MamaAI() {
 
   useEffect(() => {
     const audio = document.getElementById("music");
-
     if (audio) {
       audio.volume = 0.25;
     }
@@ -57,14 +90,24 @@ export default function MamaAI() {
 
   const responder = () => {
     setVisible(false);
-
     setTimeout(() => {
-      const random =
-        respuestas[Math.floor(Math.random() * respuestas.length)];
-
+      const random = respuestas[Math.floor(Math.random() * respuestas.length)];
       setRespuesta(random);
       setVisible(true);
     }, 300);
+  };
+
+  const darAbrazo = () => {
+    setContadorAbrazos(contadorAbrazos + 1);
+    const audio = document.getElementById("music");
+    if (audio.paused) {
+      audio.play();
+    }
+    
+    // Efecto de vibración si está en móvil
+    if (window.navigator.vibrate) {
+      window.navigator.vibrate(200);
+    }
   };
 
   const reproducirMusica = () => {
@@ -74,10 +117,38 @@ export default function MamaAI() {
 
   const activarSorpresa = () => {
     setMensajeEspecial(true);
-
+    setMostrarConfeti(true);
     const audio = document.getElementById("music");
     audio.play();
+    
+    // Ocultar confeti después de 5 segundos
+    setTimeout(() => {
+      setMostrarConfeti(false);
+    }, 5000);
   };
+
+  const manejarSubidaFotos = (e) => {
+    const archivos = Array.from(e.target.files);
+    const nuevasFotos = archivos.map(archivo => URL.createObjectURL(archivo));
+    setFotos([...fotos, ...nuevasFotos]);
+  };
+
+  const revelarMensajeSecreto = () => {
+    if (mensajeSecretoRevelado < 3) {
+      setMensajeSecretoRevelado(mensajeSecretoRevelado + 1);
+    }
+  };
+
+  const razonesPorLasQueLaAmo = [
+    "Por tu paciencia infinita",
+    "Por tus abrazos que curan todo",
+    "Por nunca rendirte conmigo",
+    "Por enseñarme a ser fuerte",
+    "Por tus consejos sabios",
+    "Por tu sonrisa que ilumina",
+    "Por cada desvelo cuidándome",
+    "Por amarme sin condiciones",
+  ];
 
   if (loading) {
     return (
@@ -96,12 +167,7 @@ export default function MamaAI() {
           textAlign: "center",
         }}
       >
-        <div
-          style={{
-            width: "100%",
-            maxWidth: "500px",
-          }}
-        >
+        <div style={{ width: "100%", maxWidth: "500px" }}>
           {terminalText.map((linea, i) => (
             <p
               key={i}
@@ -115,14 +181,12 @@ export default function MamaAI() {
             </p>
           ))}
         </div>
-
         <style>{`
           @keyframes fadeIn {
             from {
               opacity: 0;
               transform: translateY(10px);
             }
-
             to {
               opacity: 1;
               transform: translateY(0);
@@ -137,8 +201,7 @@ export default function MamaAI() {
     <div
       style={{
         minHeight: "100vh",
-        background:
-          "linear-gradient(135deg, #070012 0%, #17002e 40%, #000000 100%)",
+        background: "linear-gradient(135deg, #070012 0%, #17002e 40%, #000000 100%)",
         overflowX: "hidden",
         position: "relative",
         color: "white",
@@ -147,11 +210,29 @@ export default function MamaAI() {
         boxSizing: "border-box",
       }}
     >
+      {/* Confeti */}
+      {mostrarConfeti && (
+        <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 9999 }}>
+          {[...Array(100)].map((_, i) => (
+            <div
+              key={i}
+              style={{
+                position: "absolute",
+                width: `${5 + Math.random() * 10}px`,
+                height: `${5 + Math.random() * 10}px`,
+                background: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                left: `${Math.random() * 100}%`,
+                top: "-10px",
+                animation: `confeti ${1 + Math.random() * 2}s linear forwards`,
+                transform: `rotate(${Math.random() * 360}deg)`,
+              }}
+            />
+          ))}
+        </div>
+      )}
+
       {/* Música */}
-      <audio
-        id="music"
-        src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-      />
+      <audio id="music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop />
 
       {/* Glow fondo */}
       <div
@@ -164,11 +245,9 @@ export default function MamaAI() {
           filter: "blur(140px)",
           top: "-200px",
           left: "-200px",
-          animation:
-            "pulse 8s ease-in-out infinite alternate",
+          animation: "pulse 8s ease-in-out infinite alternate",
         }}
       />
-
       <div
         style={{
           position: "absolute",
@@ -195,29 +274,26 @@ export default function MamaAI() {
             opacity: Math.random(),
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,
-            animation: `twinkle ${
-              2 + Math.random() * 5
-            }s infinite`,
+            animation: `twinkle ${2 + Math.random() * 5}s infinite`,
           }}
         />
       ))}
 
-      {/* Corazones */}
-      {[...Array(18)].map((_, i) => (
+      {/* Corazones flotantes */}
+      {[...Array(25)].map((_, i) => (
         <div
           key={i}
           style={{
             position: "absolute",
-            color: "rgba(255,255,255,0.12)",
-            fontSize: `${10 + Math.random() * 25}px`,
+            color: `rgba(255,${100 + Math.random() * 155},${100 + Math.random() * 155},${0.1 + Math.random() * 0.2})`,
+            fontSize: `${10 + Math.random() * 30}px`,
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,
-            animation: `float ${
-              6 + Math.random() * 10
-            }s infinite linear`,
+            animation: `float ${6 + Math.random() * 10}s infinite linear`,
+            pointerEvents: "none",
           }}
         >
-          ❤️
+          {Math.random() > 0.5 ? "❤️" : "💖"}
         </div>
       ))}
 
@@ -231,30 +307,22 @@ export default function MamaAI() {
         }}
       >
         {/* HEADER */}
-        <div
-          style={{
-            textAlign: "center",
-            marginBottom: "45px",
-          }}
-        >
+        <div style={{ textAlign: "center", marginBottom: "45px" }}>
           <h1
             style={{
               fontSize: "clamp(48px, 13vw, 110px)",
               marginBottom: "10px",
               fontWeight: "900",
-              background:
-                "linear-gradient(to right, #ff4da6, #d88cff)",
+              background: "linear-gradient(to right, #ff4da6, #d88cff)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
-              textShadow:
-                "0 0 35px rgba(255,77,166,0.35)",
+              textShadow: "0 0 35px rgba(255,77,166,0.35)",
               letterSpacing: "2px",
               lineHeight: "1.1",
             }}
           >
             Mamá.AI
           </h1>
-
           <p
             style={{
               fontSize: "clamp(18px, 4vw, 30px)",
@@ -271,7 +339,7 @@ export default function MamaAI() {
           </p>
         </div>
 
-        {/* CARD */}
+        {/* CARD PRINCIPAL */}
         <div
           style={{
             background: "rgba(255,255,255,0.05)",
@@ -279,8 +347,7 @@ export default function MamaAI() {
             padding: "clamp(18px, 5vw, 45px)",
             backdropFilter: "blur(18px)",
             border: "1px solid rgba(255,255,255,0.08)",
-            boxShadow:
-              "0 0 60px rgba(255,0,128,0.1)",
+            boxShadow: "0 0 60px rgba(255,0,128,0.1)",
           }}
         >
           {/* TERMINAL */}
@@ -297,124 +364,128 @@ export default function MamaAI() {
               overflowWrap: "break-word",
             }}
           >
-            <p
-              style={{
-                color: "#00ff99",
-                fontSize: "clamp(13px, 3vw, 24px)",
-              }}
-            >
+            <p style={{ color: "#00ff99", fontSize: "clamp(13px, 3vw, 24px)" }}>
               $ initializing_mom_ai.exe
             </p>
-
-            <p style={{ fontSize: "clamp(14px, 4vw, 22px)" }}>
-              loading memories...
-            </p>
-
-            <p style={{ fontSize: "clamp(14px, 4vw, 22px)" }}>
-              loading hugs...
-            </p>
-
-            <p style={{ fontSize: "clamp(14px, 4vw, 22px)" }}>
-              loading sacrifices...
-            </p>
-
-            <p style={{ fontSize: "clamp(14px, 4vw, 22px)" }}>
-              loading unconditional love...
-            </p>
-
+            <p style={{ fontSize: "clamp(14px, 4vw, 22px)" }}>loading memories...</p>
+            <p style={{ fontSize: "clamp(14px, 4vw, 22px)" }}>loading hugs...</p>
+            <p style={{ fontSize: "clamp(14px, 4vw, 22px)" }}>loading sacrifices...</p>
+            <p style={{ fontSize: "clamp(14px, 4vw, 22px)" }}>loading unconditional love...</p>
             <br />
-
-            <p
-              style={{
-                color: "#ff66cc",
-                fontSize: "clamp(16px, 4vw, 24px)",
-              }}
-            >
-              System ready ❤️
-            </p>
-
-            <p
-              style={{
-                color: "#ffb3d9",
-                fontSize: "clamp(14px, 4vw, 22px)",
-              }}
-            >
-              Best mom detected successfully.
-            </p>
+            <p style={{ color: "#ff66cc", fontSize: "clamp(16px, 4vw, 24px)" }}>System ready ❤️</p>
+            <p style={{ color: "#ffb3d9", fontSize: "clamp(14px, 4vw, 22px)" }}>Best mom detected successfully.</p>
           </div>
 
-          {/* FOTOS */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(220px, 1fr))",
-              gap: "20px",
-              marginBottom: "45px",
-            }}
-          >
-            {[
-              "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1200&auto=format&fit=crop",
-              "https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=1200&auto=format&fit=crop",
-              "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=1200&auto=format&fit=crop",
-            ].map((img, i) => (
-              <div
-                key={i}
+          {/* SECCIÓN DE FOTOS PERSONALIZABLES */}
+          <div style={{ marginBottom: "45px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", flexWrap: "wrap", gap: "10px" }}>
+              <h2 style={{ fontSize: "clamp(20px, 5vw, 28px)" }}>📸 Nuestros recuerdos</h2>
+              <button
+                onClick={() => setMostrarSubirFoto(!mostrarSubirFoto)}
                 style={{
-                  overflow: "hidden",
-                  borderRadius: "28px",
-                  boxShadow:
-                    "0 15px 35px rgba(0,0,0,0.35)",
+                  background: "linear-gradient(to right, #ff4da6, #ff70c5)",
+                  border: "none",
+                  padding: "10px 20px",
+                  borderRadius: "18px",
+                  color: "white",
+                  fontSize: "14px",
+                  fontWeight: "600",
+                  cursor: "pointer",
                 }}
               >
-                <img
-                  src={img}
-                  alt=""
-                  style={{
-                    width: "100%",
-                    height: "clamp(220px, 40vw, 300px)",
-                    objectFit: "cover",
-                    transition: "0.5s",
-                    cursor: "pointer",
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.transform =
-                      "scale(1.08)";
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.transform =
-                      "scale(1)";
-                  }}
+                {mostrarSubirFoto ? "Cerrar" : "➕ Subir fotos"}
+              </button>
+            </div>
+            
+            {mostrarSubirFoto && (
+              <div style={{ marginBottom: "20px", padding: "20px", background: "rgba(255,255,255,0.08)", borderRadius: "20px" }}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={manejarSubidaFotos}
+                  style={{ color: "white", marginBottom: "10px" }}
                 />
+                <p style={{ fontSize: "12px", color: "#aaa" }}>Puedes subir tus propias fotos con mamá</p>
               </div>
-            ))}
+            )}
+            
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                gap: "20px",
+              }}
+            >
+              {fotos.map((img, i) => (
+                <div
+                  key={i}
+                  style={{
+                    overflow: "hidden",
+                    borderRadius: "28px",
+                    boxShadow: "0 15px 35px rgba(0,0,0,0.35)",
+                  }}
+                >
+                  <img
+                    src={img}
+                    alt=""
+                    style={{
+                      width: "100%",
+                      height: "clamp(220px, 40vw, 300px)",
+                      objectFit: "cover",
+                      transition: "0.5s",
+                      cursor: "pointer",
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.transform = "scale(1.08)";
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.transform = "scale(1)";
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* DATOS IA */}
+          {/* DATOS IA Y CONTADOR DE DÍAS */}
           <div
             style={{
               marginBottom: "40px",
               background: "rgba(255,255,255,0.03)",
               padding: "25px",
               borderRadius: "25px",
-              border:
-                "1px solid rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.06)",
               lineHeight: "2",
             }}
           >
-            <h2
-              style={{
-                marginBottom: "15px",
-                fontSize: "clamp(22px, 5vw, 35px)",
-              }}
-            >
-              🤖 Datos de Mamá.AI
-            </h2>
-
+            <h2 style={{ marginBottom: "15px", fontSize: "clamp(22px, 5vw, 35px)" }}>🤖 Datos de Mamá.AI</h2>
             <p>Modelo: MOM-GPT v1.0</p>
             <p>Fuente de energía: Amor infinito ❤️</p>
             <p>Capacidad de abrazos: Incalculable</p>
             <p>Errores detectados: 0</p>
+            <p>⭐ Días que me has acompañado: {diasDesdeNacimiento} días de puro amor</p>
+            <p>🤗 Abrazos virtuales dados: {contadorAbrazos}</p>
+          </div>
+
+          {/* 30 RAZONES */}
+          <div
+            style={{
+              marginBottom: "40px",
+              background: "rgba(255,255,255,0.03)",
+              padding: "25px",
+              borderRadius: "25px",
+              border: "1px solid rgba(255,255,255,0.06)",
+            }}
+          >
+            <h2 style={{ marginBottom: "15px", fontSize: "clamp(22px, 5vw, 35px)" }}>💖 30 razones por las que te amo</h2>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "10px" }}>
+              {[...Array(30)].map((_, i) => (
+                <p key={i} style={{ fontSize: "14px", margin: "5px 0" }}>
+                  {i + 1}. {razonesPorLasQueLaAmo[i % razonesPorLasQueLaAmo.length]}
+                </p>
+              ))}
+            </div>
           </div>
 
           {/* BOTONES */}
@@ -429,8 +500,7 @@ export default function MamaAI() {
             <button
               onClick={responder}
               style={{
-                background:
-                  "linear-gradient(to right, #ff4da6, #ff70c5)",
+                background: "linear-gradient(to right, #ff4da6, #ff70c5)",
                 border: "none",
                 padding: "16px 24px",
                 borderRadius: "18px",
@@ -438,18 +508,25 @@ export default function MamaAI() {
                 fontSize: "clamp(14px, 3vw, 18px)",
                 fontWeight: "700",
                 cursor: "pointer",
-                boxShadow:
-                  "0 10px 25px rgba(255,77,166,0.3)",
+                transition: "transform 0.2s, box-shadow 0.2s",
+                boxShadow: "0 10px 25px rgba(255,77,166,0.3)",
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = "scale(1.05)";
+                e.currentTarget.style.boxShadow = "0 15px 35px rgba(255,77,166,0.5)";
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow = "0 10px 25px rgba(255,77,166,0.3)";
               }}
             >
               ❤️ ¿Me quieres?
             </button>
 
             <button
-              onClick={reproducirMusica}
+              onClick={darAbrazo}
               style={{
-                background:
-                  "linear-gradient(to right, #7b61ff, #9e8cff)",
+                background: "linear-gradient(to right, #ff9966, #ff5e62)",
                 border: "none",
                 padding: "16px 24px",
                 borderRadius: "18px",
@@ -457,7 +534,29 @@ export default function MamaAI() {
                 fontSize: "clamp(14px, 3vw, 18px)",
                 fontWeight: "700",
                 cursor: "pointer",
+                transition: "transform 0.2s",
               }}
+              onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+              onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+            >
+              🤗 Dar abrazo virtual
+            </button>
+
+            <button
+              onClick={reproducirMusica}
+              style={{
+                background: "linear-gradient(to right, #7b61ff, #9e8cff)",
+                border: "none",
+                padding: "16px 24px",
+                borderRadius: "18px",
+                color: "white",
+                fontSize: "clamp(14px, 3vw, 18px)",
+                fontWeight: "700",
+                cursor: "pointer",
+                transition: "transform 0.2s",
+              }}
+              onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+              onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
             >
               🎵 Música
             </button>
@@ -465,8 +564,7 @@ export default function MamaAI() {
             <button
               onClick={activarSorpresa}
               style={{
-                background:
-                  "linear-gradient(to right, #ff9966, #ff5e62)",
+                background: "linear-gradient(to right, #00b4db, #0083b0)",
                 border: "none",
                 padding: "16px 24px",
                 borderRadius: "18px",
@@ -474,7 +572,11 @@ export default function MamaAI() {
                 fontSize: "clamp(14px, 3vw, 18px)",
                 fontWeight: "700",
                 cursor: "pointer",
+                transition: "transform 0.2s",
+                animation: "pulseGlow 2s infinite",
               }}
+              onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+              onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
             >
               🎁 Presiona aquí mamá
             </button>
@@ -498,18 +600,16 @@ export default function MamaAI() {
             {respuesta}
           </div>
 
-          {/* MENSAJE ESPECIAL */}
+          {/* MENSAJE ESPECIAL CON EFECTO MÁQUINA DE ESCRIBIR */}
           {mensajeEspecial && (
             <div
               style={{
                 marginTop: "40px",
-                padding: "25px",
+                padding: "35px",
                 borderRadius: "30px",
                 textAlign: "center",
-                background:
-                  "linear-gradient(135deg, rgba(255,77,166,0.15), rgba(123,97,255,0.15))",
-                border:
-                  "1px solid rgba(255,255,255,0.08)",
+                background: "linear-gradient(135deg, rgba(255,77,166,0.2), rgba(123,97,255,0.2))",
+                border: "2px solid rgba(255,255,255,0.15)",
                 animation: "fadeMain 1s ease",
               }}
             >
@@ -522,45 +622,76 @@ export default function MamaAI() {
               >
                 Gracias por darme la vida ❤️
               </h2>
-
               <p
                 style={{
                   fontSize: "clamp(16px, 4vw, 24px)",
                   lineHeight: "2",
                   color: "#f2e9ff",
+                  whiteSpace: "pre-wrap",
                 }}
               >
-                Mamá...
-                <br />
-                gracias por nunca dejarme solo.
-                <br />
-                Gracias por cada abrazo,
-                cada desvelo y cada sacrificio.
-                <br />
-                <br />
-                Todo lo bueno que hay en mí
-                empezó contigo.
-                <br />
-                Y aunque a veces no encuentre
-                las palabras correctas...
-                <br />
-                quiero que nunca olvides
-                cuánto te amo ❤️
+                {mensajeTipeado}
+                <span
+                  style={{
+                    display: "inline-block",
+                    width: "3px",
+                    height: "1.2em",
+                    backgroundColor: "#ff4da6",
+                    animation: "parpadeo 1s infinite",
+                    marginLeft: "2px",
+                  }}
+                />
               </p>
             </div>
           )}
 
-          {/* CARTA */}
-          <div
-            style={{
-              marginTop: "50px",
-              textAlign: "center",
-            }}
-          >
+          {/* MENSAJE SECRETO REVELADO GRADUALMENTE */}
+          <div style={{ marginTop: "30px", textAlign: "center" }}>
             <button
-              onClick={() =>
-                setMostrarCarta(!mostrarCarta)
-              }
+              onClick={revelarMensajeSecreto}
+              style={{
+                background: "transparent",
+                border: "1px solid #ff80bf",
+                color: "#ffb3d9",
+                padding: "12px 24px",
+                borderRadius: "18px",
+                fontSize: "clamp(12px, 3vw, 16px)",
+                cursor: "pointer",
+                transition: "all 0.3s",
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.background = "rgba(255,128,191,0.2)";
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.background = "transparent";
+              }}
+            >
+              🔐 Toca para revelar mensaje secreto
+            </button>
+            
+            {mensajeSecretoRevelado > 0 && (
+              <div
+                style={{
+                  marginTop: "20px",
+                  padding: "20px",
+                  background: "rgba(255,215,0,0.1)",
+                  borderRadius: "20px",
+                  animation: "fadeMain 0.5s ease",
+                }}
+              >
+                <p style={{ fontSize: "clamp(14px, 4vw, 20px)" }}>
+                  {mensajeSecretoRevelado === 1 && "✨ Eres la mejor mamá del universo ✨"}
+                  {mensajeSecretoRevelado === 2 && "💫 Te llevo en mi corazón cada segundo 💫"}
+                  {mensajeSecretoRevelado === 3 && "🌟 Prometo cuidarte siempre como tú me cuidaste a mí 🌟"}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* CARTA SECRETA */}
+          <div style={{ marginTop: "30px", textAlign: "center" }}>
+            <button
+              onClick={() => setMostrarCarta(!mostrarCarta)}
               style={{
                 background: "transparent",
                 border: "1px solid #ff80bf",
@@ -569,6 +700,13 @@ export default function MamaAI() {
                 borderRadius: "18px",
                 fontSize: "clamp(14px, 3vw, 18px)",
                 cursor: "pointer",
+                transition: "all 0.3s",
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.background = "rgba(255,128,191,0.2)";
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.background = "transparent";
               }}
             >
               💌 Abrir carta secreta
@@ -579,34 +717,21 @@ export default function MamaAI() {
                 style={{
                   marginTop: "25px",
                   background: "rgba(255,255,255,0.04)",
-                  padding: "25px",
+                  padding: "30px",
                   borderRadius: "30px",
                   lineHeight: "2",
                   color: "#eee",
                   animation: "fadeMain 1s ease",
                 }}
               >
-                <h2
-                  style={{
-                    marginBottom: "20px",
-                    color: "#ffd6ea",
-                    fontSize: "clamp(24px, 6vw, 42px)",
-                  }}
-                >
+                <h2 style={{ marginBottom: "20px", color: "#ffd6ea", fontSize: "clamp(24px, 6vw, 42px)" }}>
                   Para la mejor mamá ❤️
                 </h2>
-
-                <p
-                  style={{
-                    fontSize: "clamp(16px, 4vw, 22px)",
-                  }}
-                >
-                  Gracias por estar conmigo incluso
-                  en mis peores momentos.
+                <p style={{ fontSize: "clamp(16px, 4vw, 22px)" }}>
+                  Gracias por estar conmigo incluso en mis peores momentos.
                   <br />
                   <br />
-                  Gracias por enseñarme a nunca
-                  rendirme.
+                  Gracias por enseñarme a nunca rendirme.
                   <br />
                   <br />
                   Todo lo que soy hoy empezó contigo.
@@ -614,10 +739,28 @@ export default function MamaAI() {
                   <br />
                   Y aunque no siempre lo diga mucho...
                   <br />
-                  te amo muchísimo mamá ❤️
+                  <br />
+                  <strong style={{ fontSize: "1.2em", color: "#ffb3d9" }}>te amo muchísimo mamá ❤️</strong>
                 </p>
               </div>
             )}
+          </div>
+
+          {/* BADGE MEJOR MAMÁ */}
+          <div
+            style={{
+              marginTop: "40px",
+              textAlign: "center",
+              padding: "20px",
+              background: "linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,165,0,0.1))",
+              borderRadius: "20px",
+              border: "1px solid gold",
+            }}
+          >
+            <p style={{ fontSize: "clamp(20px, 5vw, 32px)", fontWeight: "bold", color: "gold" }}>
+              🏆 MEJOR MAMÁ DEL MUNDO 🏆
+            </p>
+            <p style={{ fontSize: "14px", color: "#ccc" }}>Certificado de amor infinito</p>
           </div>
         </div>
 
@@ -638,36 +781,33 @@ export default function MamaAI() {
       <style>{`
         @keyframes float {
           0% {
-            transform: translateY(0px);
+            transform: translateY(0px) rotate(0deg);
           }
-
           100% {
-            transform: translateY(-120vh);
+            transform: translateY(-120vh) rotate(360deg);
           }
         }
 
         @keyframes twinkle {
-          0% {
-            opacity: 0.2;
-          }
-
-          50% {
-            opacity: 1;
-          }
-
-          100% {
-            opacity: 0.2;
-          }
+          0%, 100% { opacity: 0.2; }
+          50% { opacity: 1; }
         }
 
         @keyframes pulse {
           0% {
             transform: scale(1) translate(0px, 0px);
           }
-
           100% {
-            transform: scale(1.2)
-              translate(30px, 20px);
+            transform: scale(1.2) translate(30px, 20px);
+          }
+        }
+
+        @keyframes pulseGlow {
+          0%, 100% {
+            box-shadow: 0 0 5px rgba(0,180,219,0.5);
+          }
+          50% {
+            box-shadow: 0 0 20px rgba(0,180,219,0.8);
           }
         }
 
@@ -676,10 +816,25 @@ export default function MamaAI() {
             opacity: 0;
             transform: translateY(20px);
           }
-
           to {
             opacity: 1;
             transform: translateY(0px);
+          }
+        }
+
+        @keyframes parpadeo {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+
+        @keyframes confeti {
+          0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(100vh) rotate(720deg);
+            opacity: 0;
           }
         }
       `}</style>
