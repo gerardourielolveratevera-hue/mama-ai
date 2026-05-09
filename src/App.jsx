@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import mamá1 from "./assets/mamá1.jpeg";
-import mamá2 from "./assets/mamá2.jpeg";
-import Familia from "./assets/Familia.jpeg";
+import mama1 from "./assets/mama1.jpeg";
+import mama2 from "./assets/mama2.jpeg";
+import familia from "./assets/familia.jpeg";
 
 export default function MamaAI() {
   const respuestas = [
@@ -27,9 +26,9 @@ export default function MamaAI() {
   const [contadorAbrazos, setContadorAbrazos] = useState(0);
   const [mostrarConfeti, setMostrarConfeti] = useState(false);
   const [fotos, setFotos] = useState([
-    mamá1,
-    mamá2,
-    Familia,
+    mama1,
+    mama2,
+    familia,
   ]);
   const [mostrarSubirFoto, setMostrarSubirFoto] = useState(false);
   const [diasDesdeNacimiento, setDiasDesdeNacimiento] = useState(0);
