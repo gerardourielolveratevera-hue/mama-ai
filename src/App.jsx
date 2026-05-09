@@ -235,7 +235,7 @@ export default function MamaAI() {
       )}
 
       {/* Música */}
-      <audio id="music" src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_bb6314e3f2.mp3" loop />
+      <audio id="music" src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_bb6314e3f2.mp3" />
 
       {/* Glow fondo */}
       <div
