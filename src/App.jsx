@@ -69,7 +69,6 @@ export default function MamaAI() {
 
   const reproducirMusica = () => {
     const audio = document.getElementById("music");
-
     audio.play();
   };
 
@@ -91,18 +90,25 @@ export default function MamaAI() {
           justifyContent: "center",
           alignItems: "center",
           fontFamily: "monospace",
-          fontSize: "24px",
-          padding: "120px 30px 60px",
+          fontSize: "clamp(15px, 4vw, 24px)",
+          padding: "40px 20px",
           boxSizing: "border-box",
+          textAlign: "center",
         }}
       >
-        <div>
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "500px",
+          }}
+        >
           {terminalText.map((linea, i) => (
             <p
               key={i}
               style={{
-                margin: "10px 0",
+                margin: "12px 0",
                 animation: "fadeIn 0.5s ease",
+                wordBreak: "break-word",
               }}
             >
               {linea}
@@ -116,6 +122,7 @@ export default function MamaAI() {
               opacity: 0;
               transform: translateY(10px);
             }
+
             to {
               opacity: 1;
               transform: translateY(0);
@@ -136,7 +143,7 @@ export default function MamaAI() {
         position: "relative",
         color: "white",
         fontFamily: "'Poppins', sans-serif",
-        padding: "120px 30px 60px",
+        padding: "70px 15px 50px",
         boxSizing: "border-box",
       }}
     >
@@ -150,8 +157,8 @@ export default function MamaAI() {
       <div
         style={{
           position: "absolute",
-          width: "600px",
-          height: "600px",
+          width: "500px",
+          height: "500px",
           background: "#ff4da644",
           borderRadius: "50%",
           filter: "blur(140px)",
@@ -165,8 +172,8 @@ export default function MamaAI() {
       <div
         style={{
           position: "absolute",
-          width: "500px",
-          height: "500px",
+          width: "400px",
+          height: "400px",
           background: "#7b61ff44",
           borderRadius: "50%",
           filter: "blur(140px)",
@@ -227,12 +234,12 @@ export default function MamaAI() {
         <div
           style={{
             textAlign: "center",
-            marginBottom: "55px",
+            marginBottom: "45px",
           }}
         >
           <h1
             style={{
-              fontSize: "clamp(60px, 10vw, 110px)",
+              fontSize: "clamp(48px, 13vw, 110px)",
               marginBottom: "10px",
               fontWeight: "900",
               background:
@@ -243,7 +250,6 @@ export default function MamaAI() {
                 "0 0 35px rgba(255,77,166,0.35)",
               letterSpacing: "2px",
               lineHeight: "1.1",
-              animation: "fadeMain 1.5s ease",
             }}
           >
             Mamá.AI
@@ -251,12 +257,12 @@ export default function MamaAI() {
 
           <p
             style={{
-              fontSize: "clamp(20px, 4vw, 30px)",
+              fontSize: "clamp(18px, 4vw, 30px)",
               color: "#e5d9ff",
-              lineHeight: "1.5",
-              maxWidth: "900px",
+              lineHeight: "1.6",
+              maxWidth: "850px",
               margin: "0 auto",
-              animation: "fadeMain 2s ease",
+              padding: "0 10px",
             }}
           >
             La inteligencia artificial más poderosa:
@@ -269,8 +275,8 @@ export default function MamaAI() {
         <div
           style={{
             background: "rgba(255,255,255,0.05)",
-            borderRadius: "40px",
-            padding: "45px",
+            borderRadius: "30px",
+            padding: "clamp(18px, 5vw, 45px)",
             backdropFilter: "blur(18px)",
             border: "1px solid rgba(255,255,255,0.08)",
             boxShadow:
@@ -281,31 +287,58 @@ export default function MamaAI() {
           <div
             style={{
               background: "#020202",
-              borderRadius: "30px",
-              padding: "35px",
+              borderRadius: "25px",
+              padding: "25px 15px",
               fontFamily: "monospace",
               marginBottom: "40px",
               border: "1px solid #222",
               textAlign: "center",
               boxShadow: "0 0 25px rgba(0,0,0,0.5)",
+              overflowWrap: "break-word",
             }}
           >
-            <p style={{ color: "#00ff99" }}>
+            <p
+              style={{
+                color: "#00ff99",
+                fontSize: "clamp(13px, 3vw, 24px)",
+              }}
+            >
               $ initializing_mom_ai.exe
             </p>
 
-            <p>loading memories...</p>
-            <p>loading hugs...</p>
-            <p>loading sacrifices...</p>
-            <p>loading unconditional love...</p>
+            <p style={{ fontSize: "clamp(14px, 4vw, 22px)" }}>
+              loading memories...
+            </p>
+
+            <p style={{ fontSize: "clamp(14px, 4vw, 22px)" }}>
+              loading hugs...
+            </p>
+
+            <p style={{ fontSize: "clamp(14px, 4vw, 22px)" }}>
+              loading sacrifices...
+            </p>
+
+            <p style={{ fontSize: "clamp(14px, 4vw, 22px)" }}>
+              loading unconditional love...
+            </p>
 
             <br />
 
-            <p style={{ color: "#ff66cc" }}>
+            <p
+              style={{
+                color: "#ff66cc",
+                fontSize: "clamp(16px, 4vw, 24px)",
+              }}
+            >
               System ready ❤️
             </p>
 
-            <p style={{ color: "#ffb3d9" }}>
+            <p
+              style={{
+                color: "#ffb3d9",
+                fontSize: "clamp(14px, 4vw, 22px)",
+              }}
+            >
               Best mom detected successfully.
             </p>
           </div>
@@ -315,7 +348,7 @@ export default function MamaAI() {
             style={{
               display: "grid",
               gridTemplateColumns:
-                "repeat(auto-fit, minmax(260px, 1fr))",
+                "repeat(auto-fit, minmax(220px, 1fr))",
               gap: "20px",
               marginBottom: "45px",
             }}
@@ -339,7 +372,7 @@ export default function MamaAI() {
                   alt=""
                   style={{
                     width: "100%",
-                    height: "260px",
+                    height: "clamp(220px, 40vw, 300px)",
                     objectFit: "cover",
                     transition: "0.5s",
                     cursor: "pointer",
@@ -369,7 +402,12 @@ export default function MamaAI() {
               lineHeight: "2",
             }}
           >
-            <h2 style={{ marginBottom: "15px" }}>
+            <h2
+              style={{
+                marginBottom: "15px",
+                fontSize: "clamp(22px, 5vw, 35px)",
+              }}
+            >
               🤖 Datos de Mamá.AI
             </h2>
 
@@ -384,7 +422,7 @@ export default function MamaAI() {
             style={{
               display: "flex",
               justifyContent: "center",
-              gap: "18px",
+              gap: "15px",
               flexWrap: "wrap",
             }}
           >
@@ -394,10 +432,10 @@ export default function MamaAI() {
                 background:
                   "linear-gradient(to right, #ff4da6, #ff70c5)",
                 border: "none",
-                padding: "18px 34px",
+                padding: "16px 24px",
                 borderRadius: "18px",
                 color: "white",
-                fontSize: "18px",
+                fontSize: "clamp(14px, 3vw, 18px)",
                 fontWeight: "700",
                 cursor: "pointer",
                 boxShadow:
@@ -413,10 +451,10 @@ export default function MamaAI() {
                 background:
                   "linear-gradient(to right, #7b61ff, #9e8cff)",
                 border: "none",
-                padding: "18px 34px",
+                padding: "16px 24px",
                 borderRadius: "18px",
                 color: "white",
-                fontSize: "18px",
+                fontSize: "clamp(14px, 3vw, 18px)",
                 fontWeight: "700",
                 cursor: "pointer",
               }}
@@ -430,14 +468,12 @@ export default function MamaAI() {
                 background:
                   "linear-gradient(to right, #ff9966, #ff5e62)",
                 border: "none",
-                padding: "18px 34px",
+                padding: "16px 24px",
                 borderRadius: "18px",
                 color: "white",
-                fontSize: "18px",
+                fontSize: "clamp(14px, 3vw, 18px)",
                 fontWeight: "700",
                 cursor: "pointer",
-                boxShadow:
-                  "0 10px 25px rgba(255,120,80,0.3)",
               }}
             >
               🎁 Presiona aquí mamá
@@ -449,13 +485,14 @@ export default function MamaAI() {
             style={{
               marginTop: "45px",
               textAlign: "center",
-              fontSize: "38px",
+              fontSize: "clamp(26px, 7vw, 42px)",
               color: "#ffb3d9",
               minHeight: "80px",
               opacity: visible ? 1 : 0,
               transition: "0.4s",
               fontWeight: "700",
               textShadow: "0 0 20px #ff66cc",
+              padding: "0 10px",
             }}
           >
             {respuesta}
@@ -466,7 +503,7 @@ export default function MamaAI() {
             <div
               style={{
                 marginTop: "40px",
-                padding: "35px",
+                padding: "25px",
                 borderRadius: "30px",
                 textAlign: "center",
                 background:
@@ -478,7 +515,7 @@ export default function MamaAI() {
             >
               <h2
                 style={{
-                  fontSize: "45px",
+                  fontSize: "clamp(28px, 7vw, 50px)",
                   marginBottom: "20px",
                   color: "#ffd6ea",
                 }}
@@ -488,7 +525,7 @@ export default function MamaAI() {
 
               <p
                 style={{
-                  fontSize: "22px",
+                  fontSize: "clamp(16px, 4vw, 24px)",
                   lineHeight: "2",
                   color: "#f2e9ff",
                 }}
@@ -530,7 +567,7 @@ export default function MamaAI() {
                 color: "#ffb3d9",
                 padding: "15px 28px",
                 borderRadius: "18px",
-                fontSize: "18px",
+                fontSize: "clamp(14px, 3vw, 18px)",
                 cursor: "pointer",
               }}
             >
@@ -542,7 +579,7 @@ export default function MamaAI() {
                 style={{
                   marginTop: "25px",
                   background: "rgba(255,255,255,0.04)",
-                  padding: "35px",
+                  padding: "25px",
                   borderRadius: "30px",
                   lineHeight: "2",
                   color: "#eee",
@@ -553,12 +590,17 @@ export default function MamaAI() {
                   style={{
                     marginBottom: "20px",
                     color: "#ffd6ea",
+                    fontSize: "clamp(24px, 6vw, 42px)",
                   }}
                 >
                   Para la mejor mamá ❤️
                 </h2>
 
-                <p style={{ fontSize: "20px" }}>
+                <p
+                  style={{
+                    fontSize: "clamp(16px, 4vw, 22px)",
+                  }}
+                >
                   Gracias por estar conmigo incluso
                   en mis peores momentos.
                   <br />
@@ -585,7 +627,8 @@ export default function MamaAI() {
             textAlign: "center",
             marginTop: "30px",
             color: "#888",
-            fontSize: "15px",
+            fontSize: "14px",
+            padding: "0 10px",
           }}
         >
           Developed with infinite love by your son 💻❤️
