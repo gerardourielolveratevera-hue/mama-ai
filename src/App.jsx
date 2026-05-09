@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import mamá1 from "./assets/mama1.jpeg";
+import mamá2 from "./assets/mama2.jpeg";
+import Familia from "./assets/familia.jpeg";
 
 export default function MamaAI() {
   const respuestas = [
@@ -24,9 +27,9 @@ export default function MamaAI() {
   const [contadorAbrazos, setContadorAbrazos] = useState(0);
   const [mostrarConfeti, setMostrarConfeti] = useState(false);
   const [fotos, setFotos] = useState([
-    "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=1200&auto=format&fit=crop",
+    mamá1,
+    mamá2,
+    Familia,
   ]);
   const [mostrarSubirFoto, setMostrarSubirFoto] = useState(false);
   const [diasDesdeNacimiento, setDiasDesdeNacimiento] = useState(0);
@@ -232,7 +235,7 @@ export default function MamaAI() {
       )}
 
       {/* Música */}
-      <audio id="music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop />
+      <audio id="music" src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_bb6314e3f2.mp3" loop />
 
       {/* Glow fondo */}
       <div
