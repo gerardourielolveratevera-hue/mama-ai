@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import mamá1 from "./assets/mama1.jpeg";
-import mamá2 from "./assets/mama2.jpeg";
-import Familia from "./assets/familia.jpeg";
+import mamá1 from "./assets/mamá1.jpeg";
+import mamá2 from "./assets/mamá2.jpeg";
+import Familia from "./assets/Familia.jpeg";
 
 export default function MamaAI() {
   const respuestas = [
