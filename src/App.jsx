@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import mama1 from "./assets/mama1.jpeg";
 import mama2 from "./assets/mama2.jpeg";
 import familia from "./assets/familia.jpeg";
