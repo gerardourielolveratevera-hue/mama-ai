@@ -777,7 +777,7 @@ export default function MamaAI() {
             padding: "0 10px",
           }}
         >
-          Developed with infinite love by your son 💻❤️
+          Desarrollado con un amor infinito. Feliz Día de Las Madres 💻❤️
         </p>
       </div>
 
